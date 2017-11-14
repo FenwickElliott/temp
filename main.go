@@ -1,35 +1,17 @@
 package main
 
 import (
-	"fmt"
-	"io"
-	"log"
-	"net/http"
-	"os"
+	"os/exec"
 )
 
 func main() {
-	url := "http://i.imgur.com/m1UIjW1.jpg"
-	// don't worry about errors
-	response, e := http.Get(url)
-	if e != nil {
-		log.Fatal(e)
-	}
+	send("Title", "Subtitle", "Body")
+}
 
-	defer response.Body.Close()
-
-	fmt.Println(response.Body)
-
-	//open a file for writing
-	file, err := os.Create("asdf.jpg")
+func send(title, subtitle, message string) {
+	args := `-e display notification "` + message + `" with title "` + title + `" subtitle "` + subtitle + `"`
+	err := exec.Command("osascript", args).Run()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-	// Use io.Copy to just dump the response body to the file. This supports huge files
-	_, err = io.Copy(file, response.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	file.Close()
-	fmt.Println("Success!")
 }
