@@ -1,17 +1,8 @@
 package main
 
-import (
-	"os/exec"
-)
+import rest "github.com/FenwickElliott/GoRest"
 
 func main() {
-	send("Title", "Subtitle", "Body")
-}
-
-func send(title, subtitle, message string) {
-	args := `-e display notification "` + message + `" with title "` + title + `" subtitle "` + subtitle + `"`
-	err := exec.Command("osascript", args).Run()
-	if err != nil {
-		panic(err)
-	}
+	gh := rest.Rest{"http://localhost:7410/"}
+	gh.Get("foo")
 }
